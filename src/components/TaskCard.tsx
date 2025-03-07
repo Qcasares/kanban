@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
@@ -38,7 +37,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
     <Card
       ref={setNodeRef}
       style={style}
-      className="task-card mb-3 cursor-pointer group glassmorphism backdrop-blur-sm hover:border-primary/30 focus-within:ring-2 focus-within:ring-primary"
+      className="task-card mb-3 cursor-pointer group bg-background glassmorphism backdrop-blur-sm hover:border-primary/30 focus-within:ring-2 focus-within:ring-primary"
       onClick={onClick}
       tabIndex={0}
       role="button"
