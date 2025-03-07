@@ -1,6 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { DndContext, DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
+import { useState, useCallback } from 'react';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { KanbanColumn } from './KanbanColumn';
 import { Dialog } from './ui/dialog';
 import { Button } from './ui/button';
@@ -8,7 +7,7 @@ import { TaskForm } from './TaskForm';
 import { ColumnForm } from './ColumnForm';
 import { BoardForm } from './BoardForm';
 import useKanbanStore, { Board, Column, Task } from '../lib/store/kanban-store';
-import { Plus, Settings2 } from 'lucide-react';
+import { Plus, Settings2, Layout } from 'lucide-react';
 
 interface KanbanBoardProps {
   board: Board;
@@ -33,7 +32,6 @@ export function KanbanBoard({ board }: KanbanBoardProps) {
     deleteColumn,
     updateBoard,
     deleteBoard,
-    reorderColumns,
   } = useKanbanStore();
 
   // Dialog handlers
@@ -126,11 +124,11 @@ export function KanbanBoard({ board }: KanbanBoardProps) {
   }, [board.id, deleteBoard]);
 
   // Drag and drop handlers
-  const handleDragStart = useCallback((event: DragStartEvent) => {
+  const handleDragStart = useCallback(() => {
     // Optional: Add any state changes needed when drag starts
   }, []);
 
-  const handleDragOver = useCallback((event: DragOverEvent) => {
+  const handleDragOver = useCallback(() => {
     // Optional: Handle hover states
   }, []);
 
@@ -163,21 +161,17 @@ export function KanbanBoard({ board }: KanbanBoardProps) {
     }
   }, [board, moveTask]);
 
-  // Function to handle column reordering
-  const handleColumnReorder = useCallback((sourceIndex: number, destinationIndex: number) => {
-    const newColumns = arrayMove(board.columns, sourceIndex, destinationIndex);
-    reorderColumns(board.id, newColumns);
-  }, [board, reorderColumns]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <header className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-        <h1 className="text-2xl font-bold">{board.title}</h1>
+      <header className="flex items-center justify-between p-4 border-b border-primary/10 backdrop-blur-sm bg-background/50">
+        <h1 className="text-2xl font-bold text-primary">{board.title}</h1>
         <div className="flex space-x-2">
           <Button
             onClick={handleAddColumn}
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 rounded-full"
+            variant="default"
           >
             <Plus size={16} />
             Add Column
@@ -186,7 +180,7 @@ export function KanbanBoard({ board }: KanbanBoardProps) {
             onClick={handleEditBoard}
             variant="outline"
             size="sm"
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 rounded-full"
           >
             <Settings2 size={16} />
             Board Settings
@@ -194,23 +188,40 @@ export function KanbanBoard({ board }: KanbanBoardProps) {
         </div>
       </header>
       
-      <main className="flex-1 overflow-x-auto overflow-y-hidden p-4">
+      <main className="flex-1 overflow-x-auto overflow-y-hidden p-4 bg-muted/20">
         <DndContext
           onDragStart={handleDragStart}
           onDragOver={handleDragOver}
           onDragEnd={handleDragEnd}
         >
-          <div className="flex h-full">
-            {board.columns.map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                tasks={column.tasks}
-                onAddTask={() => handleAddTask(column.id)}
-                onEditTask={(task) => handleEditTask(column.id, task)}
-                onEditColumn={() => handleEditColumn(column)}
-              />
-            ))}
+          <div className="flex h-full gap-4">
+            {board.columns.length > 0 ? (
+              board.columns.map((column) => (
+                <KanbanColumn
+                  key={column.id}
+                  column={column}
+                  tasks={column.tasks}
+                  onAddTask={() => handleAddTask(column.id)}
+                  onEditTask={(task) => handleEditTask(column.id, task)}
+                  onEditColumn={() => handleEditColumn(column)}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col items-center justify-center w-full h-full p-6 animate-in">
+                <div className="glassmorphism p-8 rounded-xl text-center max-w-md mx-auto">
+                  <Layout className="w-12 h-12 mx-auto mb-4 text-primary opacity-70" />
+                  <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">No columns yet</h3>
+                  <p className="text-muted-foreground mb-6">Get started by creating your first column to organize your tasks</p>
+                  <Button
+                    onClick={handleAddColumn}
+                    className="rounded-full"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Your First Column
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </DndContext>
       </main>

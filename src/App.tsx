@@ -32,12 +32,12 @@ function App() {
   const activeBoardData = boards.find((board) => board.id === activeBoard);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-      <header className="bg-white dark:bg-gray-800 shadow">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+      <header className="glassmorphism sticky top-0 z-10 border-b border-primary/10 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-700 to-blue-600 bg-clip-text text-transparent dark:from-purple-500 dark:to-blue-400">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--secondary))] bg-clip-text text-transparent">
                 Kanban Board Pro
               </h1>
             </div>
@@ -46,13 +46,14 @@ function App() {
                 href="https://github.com/your-username/kanban-board" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <Github size={20} />
               </a>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon"
+                className="rounded-full"
                 onClick={() => setDarkMode(!darkMode)}
                 title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
@@ -64,17 +65,17 @@ function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-white dark:bg-gray-800 shadow rounded-lg h-[calc(100vh-9rem)] overflow-hidden">
+        <div className="glassmorphism rounded-xl shadow-xl h-[calc(100vh-9rem)] overflow-hidden animate-in">
           <BoardSelector />
           
           {activeBoardData ? (
             <KanbanBoard board={activeBoardData} />
           ) : (
             <div className="flex flex-col items-center justify-center h-96">
-              <h2 className="text-xl font-medium text-gray-500 dark:text-gray-400">
+              <h2 className="text-xl font-medium text-muted-foreground">
                 No board selected
               </h2>
-              <p className="text-gray-400 dark:text-gray-500 mt-1">
+              <p className="text-muted-foreground/70 mt-1">
                 Please select or create a board to get started
               </p>
             </div>

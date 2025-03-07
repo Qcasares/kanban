@@ -4,6 +4,10 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -46,7 +50,27 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      blur: {
+        'sm': '8px',
+        DEFAULT: '12px',
+        'md': '16px',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/forms"),
+    function({ addBase, addUtilities }) {
+      addUtilities({
+        '.backdrop-blur-sm': {
+          'backdrop-filter': 'blur(8px)',
+        },
+        '.backdrop-blur': {
+          'backdrop-filter': 'blur(12px)',
+        },
+        '.backdrop-blur-md': {
+          'backdrop-filter': 'blur(16px)',
+        },
+      });
+    },
+  ],
 }

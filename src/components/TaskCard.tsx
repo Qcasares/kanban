@@ -38,7 +38,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
     <Card
       ref={setNodeRef}
       style={style}
-      className="mb-3 cursor-pointer group hover:shadow-md transition-all focus-within:ring-2 focus-within:ring-primary"
+      className="task-card mb-3 cursor-pointer group glassmorphism backdrop-blur-sm hover:border-primary/30 focus-within:ring-2 focus-within:ring-primary"
       onClick={onClick}
       tabIndex={0}
       role="button"
@@ -50,39 +50,45 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       }}
     >
       <CardHeader className="p-3 pb-0 flex flex-row items-start justify-between">
-        <CardTitle className="text-base font-medium text-gray-900 dark:text-gray-100">{task.title}</CardTitle>
+        <div className="flex items-center gap-2 w-full">
+          <div className={`w-2 h-2 rounded-full bg-${priorityVariants[task.priority]}`}></div>
+          <CardTitle className="text-base font-medium text-foreground">{task.title}</CardTitle>
+        </div>
         <div
           {...attributes}
           {...listeners}
-          className="opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing"
+          className="opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing transition-opacity"
           onClick={(e) => e.stopPropagation()}
         >
-          <GripVertical className="h-5 w-5 text-muted-foreground" />
+          <GripVertical className="h-5 w-5 text-muted-foreground hover:text-primary" />
         </div>
       </CardHeader>
       
       <CardContent className="p-3 pt-2">
-        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+        <p className="text-sm text-muted-foreground line-clamp-2">
           {task.description}
         </p>
       </CardContent>
       
-      <CardFooter className="p-3 pt-0 flex flex-wrap gap-2 items-center justify-between">
-        <div className="flex gap-2 flex-wrap">
+      <CardFooter className="p-3 pt-1 flex flex-wrap gap-2 items-center justify-between border-t border-border/40 mt-1">
+        <div className="flex gap-1 flex-wrap">
           {task.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs">
+            <Badge key={tag} variant="outline" className="text-xs bg-secondary/10 hover:bg-secondary/20 transition-colors">
               {tag}
             </Badge>
           ))}
         </div>
         
         <div className="flex items-center gap-2">
-          <Badge variant={priorityVariants[task.priority]} className="capitalize">
+          <Badge 
+            variant={priorityVariants[task.priority]} 
+            className="capitalize text-xs px-2 py-0 h-5"
+          >
             {task.priority}
           </Badge>
           
           {task.dueDate && (
-            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400" title={task.dueDate.toLocaleDateString()}>
+            <div className="flex items-center text-xs text-muted-foreground bg-muted/30 px-2 py-0.5 rounded-full" title={task.dueDate.toLocaleDateString()}>
               <Calendar className="h-3 w-3 mr-1" />
               {new Date(task.dueDate).toLocaleDateString()}
             </div>

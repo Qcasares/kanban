@@ -35,14 +35,14 @@ export function KanbanColumn({
 
   return (
     <div
-      className="flex flex-col bg-gray-50 dark:bg-gray-800/50 rounded-lg shadow-sm border 
-        min-w-[280px] sm:min-w-[300px] max-w-[280px] sm:max-w-[300px] h-full mx-2"
+      className="flex flex-col glassmorphism rounded-xl kanban-column
+        min-w-[280px] sm:min-w-[300px] max-w-[280px] sm:max-w-[300px] h-full"
       style={columnStyle}
     >
-      <div className="flex items-center justify-between p-3 border-b dark:border-gray-700">
+      <div className="flex items-center justify-between p-3 border-b border-primary/10 bg-gradient-to-r from-primary/5 to-transparent">
         <div className="flex items-center space-x-2">
           <h3 className="font-medium truncate">{column.title}</h3>
-          <div className="rounded-full bg-gray-200 dark:bg-gray-700 w-6 h-6 flex items-center justify-center text-xs">
+          <div className="rounded-full bg-primary/10 text-primary dark:bg-primary/20 w-6 h-6 flex items-center justify-center text-xs font-medium">
             {tasks.length}
           </div>
         </div>
@@ -50,7 +50,7 @@ export function KanbanColumn({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 rounded-full hover:bg-primary/10"
             onClick={onAddTask}
             title="Add Task"
           >
@@ -59,7 +59,7 @@ export function KanbanColumn({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8"
+            className="h-8 w-8 rounded-full hover:bg-primary/10"
             onClick={onEditColumn}
             title="Column Settings"
           >
@@ -70,10 +70,10 @@ export function KanbanColumn({
 
       <div
         ref={setNodeRef}
-        className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600"
+        className="flex-1 overflow-y-auto p-2 space-y-3 scrollbar-thin scrollbar-thumb-primary/20 hover:scrollbar-thumb-primary/30"
       >
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
-          {tasks.map((task) => (
+          {tasks.map((task, index) => (
             <TaskCard
               key={task.id}
               task={task}
@@ -81,7 +81,8 @@ export function KanbanColumn({
             />
           ))}
           {tasks.length === 0 && (
-            <div className="text-center p-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className="text-center p-6 text-sm text-muted-foreground bg-muted/10 rounded-lg border border-dashed border-muted mt-4">
+              <PlusIcon className="h-5 w-5 mx-auto mb-2 opacity-50" />
               No tasks yet
             </div>
           )}
